@@ -29,36 +29,49 @@ const User = mongoose.model('User', {
                 throw new Error('Age must be positive')
             }
         }
+    },
+    password: {
+        type: String,
+        required: true,
+        trim: true,
+        minLength: 7,
+        validate(value) {
+            if (value.toLowerCase().includes('password'))
+                throw new Error('Password can\'t contain the text \'password\'')
+        }
     }
 })
 
-const me = new User({
-    name: '      Shubham          ',
-    email: 'shubham@mail.COm'
-})
+// const me = new User({
+//     name: '      Muskan          ',
+//     email: 'muskan@mail.COm',
+//     password:'qwertyassword         '
+// })
 
-me.save().then((me) => {
-    console.log(me)
-}).catch((error) => {
-    console.log('Error', error)
-})
+// me.save().then((me) => {
+//     console.log(me)
+// }).catch((error) => {
+//     console.log('Error', error)
+// })
 
 const Task = mongoose.model('Task', {
     description: {
-        type: String
+        type: String,
+        required: true,
+        trim: true
     },
     completed: {
-        type: Boolean
+        type: Boolean,
+        default: false
     }
 })
 
-// const task1 = new Task({
-//     description: 'Clean your room',
-//     completed: false
-// })
+const task1 = new Task({
+    description: 'Assemble your pc               '
+})
 
-// task1.save().then((task1) => {
-//     console.log(task1)
-// }).catch((error) => {
-//     console.log(error)
-// })
+task1.save().then((task1) => {
+    console.log(task1)
+}).catch((error) => {
+    console.log(error)
+})
