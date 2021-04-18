@@ -40,6 +40,9 @@ const userSchema = new mongoose.Schema({
                 throw new Error('Password can\'t contain the text \'password\'')
         }
     },
+    avatar: {
+        type: Buffer
+    },
     tokens: [{
         token: {
             type: String,
@@ -57,7 +60,7 @@ userSchema.virtual('tasks', {
 })
 
 userSchema.methods.generateAuthToken = async function () {
-    const token = await jwt.sign({ _id: this._id.toString() }, 'thisismynewtest')
+    const token = await jwt.sign({ _id: this._id.toString() }, process.env.JWT_URL)
     this.tokens = this.tokens.concat({ token })
     await this.save()
     return token
@@ -67,6 +70,7 @@ userSchema.methods.toJSON = function () {
     const user = this.toObject()
     delete user.password
     delete user.tokens
+    delete user.avatar
     return user
 }
 
