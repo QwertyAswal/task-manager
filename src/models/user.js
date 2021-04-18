@@ -54,6 +54,13 @@ userSchema.methods.generateAuthToken = async function () {
     return token
 }
 
+userSchema.methods.toJSON = function () {
+    const user = this.toObject()
+    delete user.password
+    delete user.tokens
+    return user
+}
+
 userSchema.statics.findByCredentials = async (email, password) => {
     const user = await User.findOne({ email: email })
     if (!user)
